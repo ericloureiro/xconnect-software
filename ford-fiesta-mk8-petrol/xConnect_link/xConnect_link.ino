@@ -29,13 +29,22 @@
 #define DEVICE_NAME "FORD FIESTA MK8 V1.2" 
 // #define MCB_EN // Board type, if not using Micro Control Boards by xConnect, do not define this.
 #define LED_BUILTIN 2
-#define UP_BTN_PIN 11 
-#define OK_BTN_PIN 12
-#define DOWN_BTN_PIN 10
-#define MENU_BTN_PIN 7
-#define BACK_BTN_PIN 6
+
+#ifdef MCB_EN
+  #define UP_BTN_PIN 32 
+  #define OK_BTN_PIN 34
+  #define DOWN_BTN_PIN 26
+  #define MENU_BTN_PIN 35
+  #define BACK_BTN_PIN 33
+#endif
+
 #ifndef MCB_EN
   #define MCP_EN_PIN 9 // Modify only when using arduino
+  #define UP_BTN_PIN 11 
+  #define OK_BTN_PIN 12
+  #define DOWN_BTN_PIN 10
+  #define MENU_BTN_PIN 7
+  #define BACK_BTN_PIN 6
 #endif
 #define DEVICE_UNIQUE_ID "kck3e1gd-se47-t3jf-0rzk-xzpg-leoootft1dlo" // Generate ids randomly. Get a random ID from https://duid.xconnect.cc
 
