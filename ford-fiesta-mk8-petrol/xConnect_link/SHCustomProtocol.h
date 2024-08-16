@@ -34,7 +34,7 @@ isnull([Gear],'0') + ';' +
 isnull([TurnIndicatorLeft],'0') + ';' +
 isnull([TurnIndicatorRight],'0') + ';' +
 isnull([EngineIgnitionOn],'0') + ';' +
-isnull([Handbrake],'0') + ';' +
+isnull([Handbrake],'0') + ';0;' +
 isnull([GameRawData.ShowLights],'0') + ';' +
 if([CarSettings_RPMShiftLight1] > 0, 1, 0) + ';' +
 isnull([DataCorePlugin.GameRawData.Lights.HighBeams],'0') + ';' +
