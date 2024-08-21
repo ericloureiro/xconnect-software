@@ -72,7 +72,6 @@ void pulseLED(int length) {
 #include "SHCustomProtocol.h"
 SHCustomProtocol shCustomProtocol;
 #include "SHCommands.h"
-#include "CanBusHandler.h" // Init CanBus
 char loop_opt;
 unsigned long lastSerialActivity = 0;
 
