@@ -26,15 +26,17 @@
 
 // NCalc Formula: (paste into simhub "Custom Protocol")
 /*
-format(round([Rpms],0),'0') + ';' +
+format(round([Rpms], 0),'0') + ';' +
 isnull(round([SpeedKmh],0),'0') + ';' +
 isnull(round([FuelPercent],0),'0') + ';' +
-isnull(round([WaterTemperature], 0),'0') + ';' +
+isnull(round([WaterTemperature], 0)+60, '0') + ';' +
 isnull([Gear],'0') + ';' +
 isnull([TurnIndicatorLeft],'0') + ';' +
 isnull([TurnIndicatorRight],'0') + ';' +
 isnull([EngineIgnitionOn],'0') + ';' +
-isnull([Handbrake],'0') + ';0;' +
+isnull([Handbrake],'0') + ';' +
+isnull([ABSActive],'0') + ';' +
+isnull([TCActive],'0') + ';' +
 isnull([GameRawData.ShowLights],'0') + ';' +
 if([CarSettings_RPMShiftLight1] > 0, 1, 0) + ';' +
 isnull([DataCorePlugin.GameRawData.Lights.HighBeams],'0') + ';' +
@@ -46,7 +48,7 @@ isnull([DataCorePlugin.GameRawData.Drivetrain.CruiseControl],'0') + ';'
 #define __SHCUSTOMPROTOCOL_H__
 
 #include <Arduino.h>
-String rpmS, speedS, fuel, tempS, gearS, turnL, turnR, ignitionS, handbrakeS, showLights, shiftLight, highBeams, cruiseControl, ABSS;
+String rpmS, speedS, fuel, tempS, gearS, turnL, turnR, ignitionS, handbrakeS, showLights, shiftLight, highBeams, cruiseControl, ABSS, TCS;
 int rpm, speed, temp, blinkerL, blinkerR, ignition, brakeApplied, oilWarn, tc, tpms, battWarn, fullBeam, rpmgate, finetune, distance, finetuner, distanceTravelled, gearInd, absLight, arrow, handbrake, gear, counter;
 bool handbrakeOn;
 class SHCustomProtocol {
@@ -77,6 +79,7 @@ public:
     ignitionS = FlowSerialReadStringUntil(';');
     handbrakeS = FlowSerialReadStringUntil(';');
     ABSS = FlowSerialReadStringUntil(';');
+    TCS = FlowSerialReadStringUntil(';');
     showLights = FlowSerialReadStringUntil(';') + ";";
     shiftLight = FlowSerialReadStringUntil(';');
     highBeams = FlowSerialReadStringUntil(';');
@@ -151,6 +154,10 @@ public:
     } else {
       absLight = 0x00;
     }
+
+    if(TCS == "1") {
+      tc = B00000010;
+    }
     if(temp == 0 && battWarn == 17) {
       ignition = 0x00;
       battWarn = 0x00;
@@ -206,7 +213,7 @@ public:
     //Byte 3: B00010000=Park Brake
 
     //ABS
-    opSend(0x416, 0x0E, 0x00, 0x00, 0x00, 0x00, tc, 0x00, 0x00);
+    opSend(0x416, 0x0E, 0x00, 0x00, 0x00, 0x00, tc, absLight, 0x00);
     //Byte 6: B00000100=Slow flashing TC, B00000010=Solid TC Light
     //Byte 7: B10000000=Rapid flashing ABS, B01000000=Solid ABS
 
