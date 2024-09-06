@@ -46,7 +46,6 @@ void opSend(short addr, byte a, byte b, byte c, byte d, byte e, byte f, byte g, 
 #include "SHCustomProtocol.h"
 SHCustomProtocol shCustomProtocol;
 #include "SHCommands.h"
-#include "CanBusHandler.h" // Init CanBus
 char loop_opt;
 unsigned long lastSerialActivity = 0;
 
