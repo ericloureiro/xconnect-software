@@ -118,8 +118,9 @@ public:
     if(rpm < 0) {
       rpm = 0;
     }
-    rpmgate = 96 + (int)(rpm / 500);  // Calculate the gate and cast to int
-    finetune = (int)(rpm % 500) / 2;
+    int scaledRpm = (int)(rpm * 0.935); // Scale input to display correct RPM on cluster
+    rpmgate = 96 + (int)(scaledRpm / 500);  // Calculate the gate and cast to int
+    finetune = (int)(scaledRpm % 500) / 2;
     if (rpmgate > 115) {
       rpmgate = 115;
     }
