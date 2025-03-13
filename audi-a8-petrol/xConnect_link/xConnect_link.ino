@@ -27,7 +27,7 @@
 // --- Variable definitions, change as necessary ---
 #define VERSION 'j'
 #define DEVICE_NAME "AUDI A8 V1.0" 
-#define MCB_EN true // Board type, for MCB boards use true, for arduino use false
+#define MCB_EN false // Board type, for MCB boards use true, for arduino use false
 #ifndef MCB_EN
   #define MCP_EN_PIN 10 // Modify only when using arduino
 #endif
@@ -49,6 +49,11 @@ SHCustomProtocol shCustomProtocol;
 char loop_opt;
 unsigned long lastSerialActivity = 0;
 
+void pulseLED(int length) {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(length);
+  digitalWrite(LED_BUILTIN, LOW);
+}
 
 // --- Setup function, runs once
 void setup() {	
@@ -71,6 +76,7 @@ void setup() {
 // --- Loop function, runs continuously
 void loop() {
 	shCustomProtocol.loop();
+  // vTaskDelay(10); // Delay for the MCB
 	// Wait for data
 	if (FlowSerialAvailable() > 0) {
 		if (FlowSerialTimedRead() == MESSAGE_HEADER) {
@@ -83,7 +89,7 @@ void loop() {
 			else if (loop_opt == '2') Command_TM1638Count();
 			else if (loop_opt == 'B') Command_SimpleModulesCount();
 			else if (loop_opt == 'A') Command_Acq();
-			else if (loop_opt == 'N') Command_DeviceName();
+			else if (loop_opt == 'N') Command_DeviceAcknowledge();
 			else if (loop_opt == 'I') Command_UniqueId();
 			else if (loop_opt == '0') Command_Features();
 			else if (loop_opt == '4') Command_RGBLEDSCount();
@@ -96,11 +102,6 @@ void loop() {
 				String xaction = FlowSerialReadStringUntil(' ', '\n');
 				if (xaction == F("list")) Command_ExpandedCommandsList();
 				else if (xaction == F("mcutype")) Command_MCUType();
-        else if (xaction == F("tach")) Command_TachData();
-        else if (xaction == F("speedo")) Command_SpeedoData();
-        else if (xaction == F("boost")) Command_BoostData();
-        else if (xaction == F("temp")) Command_TempData();
-        else if (xaction == F("fuel")) Command_FuelData();
 			}
 		}
 	}
