@@ -76,7 +76,9 @@ void setup() {
 // --- Loop function, runs continuously
 void loop() {
 	shCustomProtocol.loop();
-  // vTaskDelay(10); // Delay for the MCB
+	#ifdef MCB_EN
+  		vTaskDelay(10); // Delay for the MCB
+	#endif
 	// Wait for data
 	if (FlowSerialAvailable() > 0) {
 		if (FlowSerialTimedRead() == MESSAGE_HEADER) {
